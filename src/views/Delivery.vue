@@ -189,7 +189,7 @@ import location from "aws-sdk/clients/location";
 import Map from "../components/Map";
 import * as turf from "@turf/turf";
 
-Date.prototype.addDays = function(days) {
+Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
   return date;
@@ -344,9 +344,7 @@ export default {
   methods: {
     uniqueId() {
       const dateString = Date.now().toString(36);
-      const randomness = Math.random()
-        .toString(36)
-        .substr(2);
+      const randomness = Math.random().toString(36).substr(2);
       return dateString + randomness;
     },
 
@@ -434,33 +432,31 @@ export default {
       update(async () => {
         if (!val || val.length < 3) {
           this.departureOptions = [];
-          abort()
-          return
-        }
-        else { 
+          abort();
+          return;
+        } else {
           await this.searchCoords(val, "departure");
-          return
-        }        
+          return;
+        }
       });
     },
     filterDest(val, update, abort) {
       update(async () => {
-        if (!val || val.length < 3) { 
+        if (!val || val.length < 3) {
           this.destinationOptions = [];
-          abort()
-          return
-        }
-        else {
+          abort();
+          return;
+        } else {
           await this.searchCoords(val, "destination");
-          return
-        }        
+          return;
+        }
       });
     },
 
     searchCoords(val, category) {
-      let vm=this;
-      return new Promise(function(resolve, reject) {
-        if (val && val.lat) {          
+      let vm = this;
+      return new Promise(function (resolve, reject) {
+        if (val && val.lat) {
           vm.locationService.searchPlaceIndexForPosition(
             {
               IndexName: process.env.VUE_APP_PLACE,
@@ -470,9 +466,9 @@ export default {
             (err, response) => {
               if (err) {
                 console.error(err);
-                reject (err);
+                reject(err);
               } else if (response && response.Results.length > 0) {
-                resolve (response.Results[0].Place.Label);
+                resolve(response.Results[0].Place.Label);
               }
             }
           );
@@ -493,25 +489,25 @@ export default {
                 reject(false);
               } else if (response && response.Results.length > 0) {
                 if (category == "departure") vm.departureOptions = [];
-                else if (category == "destination") vm.destinationOptions = [];                 
+                else if (category == "destination") vm.destinationOptions = [];
                 for (var i = 0; i < response.Results.length; i++) {
-                  let coordArray = response.Results[i].Place.Geometry.Point.concat(catArray);
+                  let coordArray =
+                    response.Results[i].Place.Geometry.Point.concat(catArray);
                   if (category == "departure") {
                     vm.departureOptions.push({
                       label: response.Results[i].Place.Label,
                       value: coordArray,
                     });
-                  }
-                  else if (category == "destination") {
+                  } else if (category == "destination") {
                     vm.destinationOptions.push({
                       label: response.Results[i].Place.Label,
                       value: coordArray,
                     });
-                  }                  
+                  }
                 }
               }
             }
-          );          
+          );
           resolve(true);
         }
       });
@@ -522,9 +518,9 @@ export default {
         credentials: this.credentials,
         depLngLat: this.depLocation,
         destLngLat: this.destLocation,
-        travelMode: this.travelMode
+        travelMode: this.travelMode,
       });
-      this.showSummary = true
+      this.showSummary = true;
     },
 
     calculateGeoFence(center) {
@@ -545,7 +541,7 @@ export default {
       try {
         await this.$store.dispatch("general/fetchDeliveryInfoList", {});
         this.data = [];
-        if (this.deliveryList && this.deliveryList.length > 0) {          
+        if (this.deliveryList && this.deliveryList.length > 0) {
           for (let i = 0; i < this.deliveryList.length; i++) {
             this.data.push({
               id: this.deliveryList[i].id,
@@ -559,9 +555,10 @@ export default {
               status: this.deliveryList[i].status,
               userPhone: this.deliveryList[i].userPhone,
               deliveryAgentId: this.deliveryList[i].deliveryAgent.id,
-              deliveryAgentFullName: this.deliveryList[i].deliveryAgent.fullName
-              deliveryType: this.deliveryList[i].deliveryAgent.deliveryType                   
-              });
+              deliveryAgentFullName:
+                this.deliveryList[i].deliveryAgent.fullName,
+              deliveryType: this.deliveryList[i].deliveryAgent.deliveryType,
+            });
           }
         }
       } catch (error) {
