@@ -263,9 +263,10 @@ export default {
           sortable: true,
         },
         {
-          name: "deliveryAgentId",
-          label: "AgentId",
-          field: "deliveryAgentId",
+          name: "deliveryType",
+          label: "Delivery Type",
+          field: "deliveryType",
+          sortable: true,
         },
         {
           name: "distance",
@@ -595,7 +596,6 @@ export default {
       this.agent = "";
       this.userPhone = "";
       this.deviceId = "";
-      this.deliveryType = "";
       this.params = "";
     },
 
