@@ -17,7 +17,7 @@ export async function fetchDevicesIdsInRoute(
         const {
             // @ts-ignore
             data: { listDeliveryInfos: { items: results } }
-        } = await API.graphql(graphqlOperation(listDevicesIds));        
+        } = await API.graphql(graphqlOperation(listDevicesIds));
         for (let i = 0; i < results.length; i++) {
             deviceIds.push(results[i].deliveryAgent.device.id)
         }
@@ -61,7 +61,7 @@ export function setGeoFencePolygon(
 }
 
 export function calculateRoute(
-    { commit }, { credentials, depLngLat, destLngLat}) {
+    { commit }, { credentials, depLngLat, destLngLat }) {
     console.group("store/general/actions/calculateRoute");
     this.locationService = new Location({
         credentials: credentials,
@@ -71,18 +71,18 @@ export function calculateRoute(
     var params = {
         CalculatorName: process.env.VUE_APP_ROUTE,
         DeparturePosition: [
-          depLngLat.lng,
-          depLngLat.lat,
+            depLngLat.lng,
+            depLngLat.lat,
         ],
         DestinationPosition: [
-          destLngLat.lng,
-          destLngLat.lat,
+            destLngLat.lng,
+            destLngLat.lat,
         ],
         DepartNow: false,
         IncludeLegGeometry: true,
         TravelMode: 'Car'
-      };    
-      this.locationService.calculateRoute(params, function(err, data) {
+    };
+    this.locationService.calculateRoute(params, function (err, data) {
         if (err) console.log(err, err.stack);
         // an error occurred
         else {
@@ -95,49 +95,49 @@ export function calculateRoute(
 
 export function saveGeoFence(
     { commit }, { name, polygonVertices, credentials }) {
-        return new Promise((resolve, reject) => {
-            try {
-                console.group("store/general/actions/saveGeoFence");
-                commit("SET_LOADER", true);
+    return new Promise((resolve, reject) => {
+        try {
+            console.group("store/general/actions/saveGeoFence");
+            commit("SET_LOADER", true);
 
-                this.locationService = new Location({
-                    credentials: credentials,
-                    region: awsconfig.aws_project_region,
-                });    
+            this.locationService = new Location({
+                credentials: credentials,
+                region: awsconfig.aws_project_region,
+            });
 
-                const geoParams = {
-                    CollectionName: process.env.VUE_APP_GEOFENCE,
-                    GeofenceId: name,
-                    Geometry: {
-                        Polygon: [polygonVertices]
-                    }
+            const geoParams = {
+                CollectionName: process.env.VUE_APP_GEOFENCE,
+                GeofenceId: name,
+                Geometry: {
+                    Polygon: [polygonVertices]
                 }
-                
-                    this.locationService.putGeofence(geoParams, function(err, data) {
-                    if (err) { 
-                        console.log(err, err.stack);
-                        reject("Rejected");
-                    }
-                    else { 
-                        console.log("Saved on Amazon Location Service: " + data.GeofenceId);
-                        commit("SET_GEOFENCEID", data.GeofenceId);  
-                        resolve("Resolved");                                  
-                        }                
-                    })      
-                
-                commit("SET_LOADER", false);
-                console.groupEnd();
-                    
-
-            } catch (error) {
-                console.error(error);
-                commit("SET_LOADER", false);
-                console.groupEnd(); 
-                reject("Rejected");       
-                throw error;
             }
-        });
-    }
+
+            this.locationService.putGeofence(geoParams, function (err, data) {
+                if (err) {
+                    console.log(err, err.stack);
+                    reject("Rejected");
+                }
+                else {
+                    console.log("Saved on Amazon Location Service: " + data.GeofenceId);
+                    commit("SET_GEOFENCEID", data.GeofenceId);
+                    resolve("Resolved");
+                }
+            })
+
+            commit("SET_LOADER", false);
+            console.groupEnd();
+
+
+        } catch (error) {
+            console.error(error);
+            commit("SET_LOADER", false);
+            console.groupEnd();
+            reject("Rejected");
+            throw error;
+        }
+    });
+}
 
 export function fetchGeoFenceItems(
     { commit }, { credentials }) {
@@ -154,7 +154,7 @@ export function fetchGeoFenceItems(
 
         this.locationService.listGeofences({ CollectionName: process.env.VUE_APP_GEOFENCE }, function (err, response) {
             if (err) console.log(err, err.stack); // an error occurred
-            else {                
+            else {
                 if (response && response.Entries.length > 0) {
                     for (let i = 0; i < response.Entries.length; i++) {
                         if (response.Entries[i].Status == "ACTIVE") {
@@ -167,7 +167,7 @@ export function fetchGeoFenceItems(
                     }
                 }
             }
-        });        
+        });
 
         //console.log(usersList);
         commit("SET_LOCATION_LIST", locationList);
@@ -243,7 +243,7 @@ export async function saveAgent({ commit },
             result = agentObj
         }
 
-        commit("SET_LOADER", false);        
+        commit("SET_LOADER", false);
         commit("SET_USER", result)
         console.groupEnd();
         //console.log(result);
@@ -300,7 +300,7 @@ export async function delAgent({ commit },
     try {
         console.group("store/general/actions/delAgent");
         commit("SET_LOADER", true);
-        
+
         var delInput = {
             id: id
         }
@@ -329,11 +329,11 @@ export async function delAgent({ commit },
                     console.log(delinfo.id);
                 }
             }
-          }
+        }
 
         commit("SET_LOADER", false);
         console.log(result.id);
-        console.groupEnd();        
+        console.groupEnd();
     } catch (error) {
         console.error(error);
         commit("SET_LOADER", false);
@@ -351,17 +351,17 @@ export async function delDevice({ commit },
         var delInput = {
             id: id
         }
-        
+
         const {
             // @ts-ignore
             data: { deleteDevice: result }
         } = await API.graphql(graphqlOperation(deleteDevice, {
             input: delInput
         }));
-        
+
         commit("SET_LOADER", false);
         console.log(result.id);
-        console.groupEnd();        
+        console.groupEnd();
     } catch (error) {
         console.error(error);
         commit("SET_LOADER", false);
@@ -379,17 +379,17 @@ export async function delDelivery({ commit },
         var delInput = {
             id: id
         }
-        
+
         const {
             // @ts-ignore
             data: { deleteDeliveryInfo: result }
         } = await API.graphql(graphqlOperation(deleteDeliveryInfo, {
             input: delInput
         }));
-        
+
         commit("SET_LOADER", false);
         console.log(result.id);
-        console.groupEnd();        
+        console.groupEnd();
     } catch (error) {
         console.error(error);
         commit("SET_LOADER", false);
@@ -424,15 +424,15 @@ export async function fetchDeliveryInfoList(
 }
 
 export async function saveDeliveryInfo({ commit },
-    {   id, 
-        geoStart, 
-        geoEnd, 
-        duration, 
-        distance, 
-        geoFenceId, 
-        userPhone, 
-        expireAt, 
-        routeStatus, 
+    { id,
+        geoStart,
+        geoEnd,
+        duration,
+        distance,
+        geoFenceId,
+        userPhone,
+        expireAt,
+        routeStatus,
         deliveryInfoDeliveryAgentId }) {
     try {
         console.group("store/general/actions/saveadeliveryinfo");
@@ -473,7 +473,7 @@ export async function saveDeliveryInfo({ commit },
             result = deliveryInfoObj
         }
 
-        commit("SET_LOADER", false);        
+        commit("SET_LOADER", false);
         console.groupEnd();
         console.log(result);
         return result;

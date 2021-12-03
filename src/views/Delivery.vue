@@ -36,7 +36,7 @@
     </q-table>
 
     <q-dialog v-model="b_addrow" persistent>
-      <q-card style="width: 700px; max-width: 80vw;">
+      <q-card style="width: 700px; max-width: 80vw">
         <q-bar>
           <q-space />
           <q-btn dense flat icon="close" v-close-popup>
@@ -120,31 +120,38 @@
     <q-dialog v-model="showSummary">
       <q-card>
         <q-card-section class="bg-primary text-white">
-        <div class="text-h6">Route Summary</div>
-      </q-card-section>
+          <div class="text-h6">Route Summary</div>
+        </q-card-section>
 
         <q-list>
           <q-item>
-          <q-item-section avatar>
-            <q-icon color="blue" name="add_road" />
-          </q-item-section>
+            <q-item-section avatar>
+              <q-icon color="blue" name="add_road" />
+            </q-item-section>
 
-          <q-item-section>
-            <q-item-label>Estimate Distance</q-item-label>
-            <q-item-label caption>{{ Math.round(routeSummary.Distance ) }} Km</q-item-label>
-          </q-item-section>
-        </q-item>
+            <q-item-section>
+              <q-item-label>Estimate Distance</q-item-label>
+              <q-item-label caption
+                >{{ Math.round(routeSummary.Distance) }} Km</q-item-label
+              >
+            </q-item-section>
+          </q-item>
 
-        <q-item>
-          <q-item-section avatar>
-            <q-icon color="blue" name="schedule" />
-          </q-item-section>
+          <q-item>
+            <q-item-section avatar>
+              <q-icon color="blue" name="schedule" />
+            </q-item-section>
 
-          <q-item-section>
-            <q-item-label>Estimate Duration</q-item-label>
-            <q-item-label caption>{{ Math.round(routeSummary.DurationSeconds / 60) }} min</q-item-label>
-          </q-item-section>
-        </q-item>
+            <q-item-section>
+              <q-item-label>Estimate Duration</q-item-label>
+              <q-item-label caption
+                >{{
+                  Math.round(routeSummary.DurationSeconds / 60)
+                }}
+                min</q-item-label
+              >
+            </q-item-section>
+          </q-item>
         </q-list>
 
         <q-card-actions align="right">
@@ -211,6 +218,7 @@ export default {
       btnToggle: null,
       visibleColumns: [
         "deliveryAgentFullName",
+        "deliveryType",
         "status",
         "createAt",
         "duration",
@@ -224,6 +232,7 @@ export default {
       params: null,
       credentials: null,
       isNewDevice: true,
+      deliveryType: "",
       deviceType: "",
       deviceId: "",
       deviceUpdatedAt: "",
@@ -513,6 +522,7 @@ export default {
         credentials: this.credentials,
         depLngLat: this.depLocation,
         destLngLat: this.destLocation,
+        travelMode: this.travelMode
       });
       this.showSummary = true
     },
@@ -549,7 +559,8 @@ export default {
               status: this.deliveryList[i].status,
               userPhone: this.deliveryList[i].userPhone,
               deliveryAgentId: this.deliveryList[i].deliveryAgent.id,
-              deliveryAgentFullName: this.deliveryList[i].deliveryAgent.fullName            
+              deliveryAgentFullName: this.deliveryList[i].deliveryAgent.fullName
+              deliveryType: this.deliveryList[i].deliveryAgent.deliveryType                   
               });
           }
         }
@@ -584,6 +595,7 @@ export default {
       this.agent = "";
       this.userPhone = "";
       this.deviceId = "";
+      this.deliveryType = "";
       this.params = "";
     },
 
