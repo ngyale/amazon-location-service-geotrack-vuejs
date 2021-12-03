@@ -219,8 +219,6 @@ export default {
       visibleColumns: [
         "deliveryAgentFullName",
         "deliveryType",
-        "status",
-        "createAt",
         "duration",
         "distance",
         "mapPosition",
@@ -263,6 +261,11 @@ export default {
           label: "Agent Name",
           field: "deliveryAgentFullName",
           sortable: true,
+        },
+        {
+          name: "deliveryAgentId",
+          label: "AgentId",
+          field: "deliveryAgentId",
         },
         {
           name: "distance",
